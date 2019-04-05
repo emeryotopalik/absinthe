@@ -7,9 +7,7 @@ defmodule Absinthe.Type.BuiltIns.Introspection do
     description "Represents a schema"
 
     field :types, list_of(:__type) do
-      resolve fn _, %{schema: schema} ->
-        {:ok, Absinthe.Schema.used_types(schema) ++ Absinthe.Schema.introspection_types(schema)}
-      end
+      resolve &NerdGraph.Introspection.schema_types/2
     end
 
     field :query_type,
@@ -24,11 +22,9 @@ defmodule Absinthe.Type.BuiltIns.Introspection do
         {:ok, Absinthe.Schema.lookup_type(schema, :mutation)}
       end
 
-    field :subscription_type,
-      type: :__type,
-      resolve: fn _, %{schema: schema} ->
-        {:ok, Absinthe.Schema.lookup_type(schema, :subscription)}
-      end
+    field :subscription_type, :__type do
+      resolve &NerdGraph.Introspection.subscription_type/2
+    end
 
     field :directives,
       type: list_of(:__directive),
