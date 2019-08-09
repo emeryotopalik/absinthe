@@ -10,7 +10,7 @@ defmodule Absinthe.Schema.Rule.DefaultEnumValuePresent do
     """
     The default_value for an enum must be present in the enum values.
 
-    Could not use default value of "#{default_value}" for #{inspect(type)}.
+    Could not use default value of "#{inspect(default_value)}" for #{inspect(type)}.
 
     Valid values are:
     #{value_list}
@@ -46,7 +46,11 @@ defmodule Absinthe.Schema.Rule.DefaultEnumValuePresent do
     values = Enum.map(type.values, &elem(&1, 1).value)
     value_list = Enum.map(values, &"\n * #{&1}")
 
-    if not (default_value in values) do
+    default_valid? =
+      List.wrap(default_value)
+      |> Enum.all?(fn default -> default in values end)
+
+    if not default_valid? do
       detail = %{
         value_list: value_list,
         type: type.__reference__.identifier,
