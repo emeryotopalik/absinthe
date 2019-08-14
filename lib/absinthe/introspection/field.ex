@@ -10,6 +10,7 @@ defmodule Absinthe.Introspection.Field do
     %Type.Field{
       name: "__typename",
       type: :string,
+      complexity: 0,
       description: "The name of the object type currently being queried.",
       middleware: [
         Absinthe.Resolution.resolver_spec(fn
