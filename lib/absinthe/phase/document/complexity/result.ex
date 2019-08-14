@@ -32,7 +32,8 @@ defmodule Absinthe.Phase.Document.Complexity.Result do
     end
   end
 
-  defp handle_node(%{complexity: complexity} = node, max, errors)
+  # Updated to only handle the top level operation so that we can simplify error messaging
+  defp handle_node(%Blueprint.Document.Operation{complexity: complexity} = node, max, errors)
        when is_integer(complexity) and complexity > max do
     error = error(node, complexity, max)
 
@@ -61,22 +62,15 @@ defmodule Absinthe.Phase.Document.Complexity.Result do
   end
 
   def error_message(node, complexity, max) do
-    "#{describe_node(node)} is too complex: complexity is #{complexity} and maximum is #{max}"
+    "#{describe_node(node)} is too complex: you asked for #{complexity} fields and the maximum" <>
+      " is #{max}"
   end
 
-  defp describe_node(%Blueprint.Document.Operation{name: nil}) do
+  defp describe_node(%{name: nil}) do
     "Operation"
   end
 
-  defp describe_node(%Blueprint.Document.Operation{name: name}) do
+  defp describe_node(%{name: name}) do
     "Operation #{name}"
-  end
-
-  defp describe_node(%Blueprint.Document.Field{name: name}) do
-    "Field #{name}"
-  end
-
-  defp describe_node(%Blueprint.Document.Fragment.Spread{name: name}) do
-    "Spread #{name}"
   end
 end

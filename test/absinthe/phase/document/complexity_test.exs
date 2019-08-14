@@ -233,8 +233,7 @@ defmodule Absinthe.Phase.Document.ComplexityTest do
       errors = result.execution.validation_errors |> Enum.map(& &1.message)
 
       assert errors == [
-               "Field fooComplexity is too complex: complexity is 6 and maximum is 5",
-               "Operation ComplexityError is too complex: complexity is 6 and maximum is 5"
+               "Operation ComplexityError is too complex: you asked for 6 fields and the maximum is 5"
              ]
     end
 
@@ -261,8 +260,7 @@ defmodule Absinthe.Phase.Document.ComplexityTest do
       errors = result.execution.validation_errors |> Enum.map(& &1.message)
 
       assert errors == [
-               "Field nestedComplexity is too complex: complexity is 5 and maximum is 4",
-               "Operation ComplexityNested is too complex: complexity is 5 and maximum is 4"
+               "Operation ComplexityNested is too complex: you asked for 5 fields and the maximum is 4"
              ]
     end
 
@@ -281,8 +279,7 @@ defmodule Absinthe.Phase.Document.ComplexityTest do
       errors = result.execution.validation_errors |> Enum.map(& &1.message)
 
       assert errors == [
-               "Field fooComplexity is too complex: complexity is 105 and maximum is 100",
-               "Operation is too complex: complexity is 105 and maximum is 100"
+               "Operation is too complex: you asked for 105 fields and the maximum is 100"
              ]
     end
 
